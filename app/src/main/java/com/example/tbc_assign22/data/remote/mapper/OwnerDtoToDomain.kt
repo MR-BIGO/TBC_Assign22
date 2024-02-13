@@ -5,9 +5,9 @@ import com.example.tbc_assign22.domain.model.Owner
 
 fun OwnerDto.toDomain(): Owner {
     return Owner(
-        firstName = firstName,
-        lastName = lastName,
-        profile = profile,
-        postDate = postDate,
+        firstName = firstName ?: "",
+        lastName = lastName ?: "",
+        profile = profile ?: "",
+        postDate = postDate ?: 0,
     )
 }

@@ -6,7 +6,7 @@ import com.example.tbc_assign22.domain.model.Place
 fun PlaceDto.toDomain(): Place {
     return Place(
         id = id,
-        cover = cover,
-        title = title,
+        cover = cover ?: "",
+        title = title ?: "",
     )
 }

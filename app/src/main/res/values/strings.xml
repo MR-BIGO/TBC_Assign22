@@ -2,4 +2,9 @@
     <string name="app_name">TBC_Assign22</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="share">Share</string>
+    <string name="head_string">👨🏻</string>
+    <string name="write_comment">Write comment…</string>
+    <string name="comments">Comments</string>
+    <string name="likes">Likes</string>
 </resources>

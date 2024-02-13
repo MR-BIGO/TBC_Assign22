@@ -1,11 +1,11 @@
 package com.example.tbc_assign22.presentation.screen.home
 
-import android.util.Log.d
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tbc_assign22.data.common.Resource
 import com.example.tbc_assign22.domain.use_case.GetPlacesUseCase
 import com.example.tbc_assign22.domain.use_case.GetPostsUseCase
+import com.example.tbc_assign22.presentation.event.HomeFragmentEvents
 import com.example.tbc_assign22.presentation.mapper.toPres
 import com.example.tbc_assign22.presentation.state.home.HomeFragmentState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,44 +25,60 @@ class HomeFragmentViewModel @Inject constructor(
     private val _homeState = MutableStateFlow(HomeFragmentState())
     val homeState: SharedFlow<HomeFragmentState> = _homeState.asStateFlow()
 
-//    init {
-//        setUpPlaces()
-//        setUpPosts()
-//        d("checking places data", "${_homeState.value.places}")
-//        d("checking posts data", "${_homeState.value.posts}")
-//
-//    }
+    init {
+        setUpPlaces()
+        setUpPosts()
+    }
 
-     fun setUpPlaces() {
+    fun onEvent(event: HomeFragmentEvents) {
+        when (event) {
+            is HomeFragmentEvents.ResetError -> setError(null)
+        }
+    }
+
+    private fun setError(error: String?) {
+        viewModelScope.launch {
+            _homeState.update { currentState -> currentState.copy(error = error) }
+        }
+    }
+
+    private fun setUpPlaces() {
         viewModelScope.launch {
             getPlaces().collect {
                 when (it) {
                     is Resource.Success -> {
                         _homeState.update { currentState -> currentState.copy(places = it.data.map { place -> place.toPres() }) }
-                        d("checking places data", "${_homeState.value.places}")
                     }
 
-                    is Resource.Error -> {}
-                    is Resource.Loading -> {}
+                    is Resource.Error -> {
+                        setError(it.error)
+                    }
+
+                    is Resource.Loading -> {
+                        _homeState.update { currentState -> currentState.copy(loading = it.loading) }
+                    }
                 }
             }
         }
     }
 
-     fun setUpPosts() {
+    private fun setUpPosts() {
         viewModelScope.launch {
             getPosts().collect {
                 when (it) {
                     is Resource.Success -> {
                         _homeState.update { currentState -> currentState.copy(posts = it.data.map { post -> post.toPres() }) }
-                        d("checking posts data", "${_homeState.value.posts}")
                     }
 
-                    is Resource.Error -> {}
-                    is Resource.Loading -> {}
+                    is Resource.Error -> {
+                        setError(it.error)
+                    }
+
+                    is Resource.Loading -> {
+                        _homeState.update { currentState -> currentState.copy(loading = it.loading) }
+                    }
                 }
             }
         }
     }
-
 }

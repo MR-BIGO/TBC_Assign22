@@ -6,4 +6,6 @@
     <color name="fragment_background_two">#1F2E35</color>
     <color name="grey_medium">#30444E</color>
     <color name="grey_light">#96A7AF</color>
+    <color name="green">#3ED598</color>
+    <color name="edit_text_background">#2A3C44</color>
 </resources>

@@ -8,8 +8,8 @@ import retrofit2.Response
 
 class HandleResponse {
     suspend fun <T : Any> safeApiCall(call: suspend () -> Response<T>): Flow<Resource<T>> = flow {
+        emit(Resource.Loading(true))
         try {
-            emit(Resource.Loading(true))
             val response = call()
             val body = response.body()
             if (response.isSuccessful && body != null) {
