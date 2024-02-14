@@ -25,14 +25,11 @@ class HomeFragmentViewModel @Inject constructor(
     private val _homeState = MutableStateFlow(HomeFragmentState())
     val homeState: SharedFlow<HomeFragmentState> = _homeState.asStateFlow()
 
-    init {
-        setUpPlaces()
-        setUpPosts()
-    }
-
     fun onEvent(event: HomeFragmentEvents) {
         when (event) {
             is HomeFragmentEvents.ResetError -> setError(null)
+            is HomeFragmentEvents.GetPosts -> {setUpPosts()}
+            is HomeFragmentEvents.GetPlaces -> {setUpPlaces()}
         }
     }
 

@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.example.tbc_assign22.R
 import com.example.tbc_assign22.databinding.PostItemBinding
 import com.example.tbc_assign22.presentation.extension.epochToDate
@@ -25,7 +26,7 @@ class PostsRecyclerAdapter :
                 .plus(itemView.resources.getString(R.string.comments))
             tvLikes.text =
                 post.likes.toString().plus(" ").plus(itemView.resources.getString(R.string.likes))
-            Glide.with(itemView.context).load(post.owner.profile).placeholder(R.drawable.ic_launcher_background).into(ivProfile)
+            Glide.with(itemView.context).load(post.owner.profile).placeholder(R.drawable.ic_launcher_background).transform(CircleCrop()).into(ivProfile)
 
             post.images.let {
                 if (it.isNotEmpty()) {

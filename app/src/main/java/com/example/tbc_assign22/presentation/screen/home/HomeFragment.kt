@@ -27,6 +27,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     override fun setUp() {
         setUpRecyclers()
         bindObservers()
+
+        viewModel.onEvent(HomeFragmentEvents.GetPlaces)
+        viewModel.onEvent(HomeFragmentEvents.GetPosts)
     }
 
     private fun setUpRecyclers() = with(binding) {
@@ -55,11 +58,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         state.error?.let {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-            d("checking this specific error", it)
             viewModel.onEvent(HomeFragmentEvents.ResetError)
         }
 
-        if (state.loading) progressBar.visibility = View.VISIBLE else View.GONE
+         progressBar.visibility =if (state.loading) View.VISIBLE else View.GONE
     }
 
     private fun bindObservers() {
