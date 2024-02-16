@@ -15,6 +15,8 @@ import com.example.tbc_assign22.presentation.model.PostPresentation
 class PostsRecyclerAdapter :
     ListAdapter<PostPresentation, PostsRecyclerAdapter.PostsViewHolder>(DiffCallback()) {
 
+    var itemOnClick: ((Int) -> Unit)? = null
+
     inner class PostsViewHolder(private val binding: PostItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind() = with(binding) {
@@ -26,23 +28,34 @@ class PostsRecyclerAdapter :
                 .plus(itemView.resources.getString(R.string.comments))
             tvLikes.text =
                 post.likes.toString().plus(" ").plus(itemView.resources.getString(R.string.likes))
-            Glide.with(itemView.context).load(post.owner.profile).placeholder(R.drawable.ic_launcher_background).transform(CircleCrop()).into(ivProfile)
+            Glide.with(itemView.context).load(post.owner.profile)
+                .placeholder(R.drawable.ic_launcher_background).transform(CircleCrop())
+                .into(ivProfile)
 
             post.images.let {
                 if (it.isNotEmpty()) {
-                    Glide.with(itemView.context).load(post.images[0]).placeholder(R.drawable.ic_launcher_background).into(ivFirstImage)
+                    Glide.with(itemView.context).load(post.images[0])
+                        .placeholder(R.drawable.ic_launcher_background).into(ivFirstImage)
                 }
                 if (it.size > 1) {
-                    Glide.with(itemView.context).load(post.images[1]).placeholder(R.drawable.ic_launcher_background).into(ivSecondImage)
+                    Glide.with(itemView.context).load(post.images[1])
+                        .placeholder(R.drawable.ic_launcher_background).into(ivSecondImage)
                 }
                 if (it.size > 2) {
-                    Glide.with(itemView.context).load(post.images[2]).placeholder(R.drawable.ic_launcher_background).into(ivThirdImage)
+                    Glide.with(itemView.context).load(post.images[2])
+                        .placeholder(R.drawable.ic_launcher_background).into(ivThirdImage)
                 }
+            }
+        }
+
+        fun listeners() {
+            binding.root.setOnClickListener {
+                itemOnClick!!(currentList[adapterPosition].id)
             }
         }
     }
 
-    fun setData(posts: List<PostPresentation>){
+    fun setData(posts: List<PostPresentation>) {
         submitList(posts)
     }
 
@@ -58,6 +71,7 @@ class PostsRecyclerAdapter :
 
     override fun onBindViewHolder(holder: PostsViewHolder, position: Int) {
         holder.bind()
+        holder.listeners()
     }
 
     private class DiffCallback : DiffUtil.ItemCallback<PostPresentation>() {

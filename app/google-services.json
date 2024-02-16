@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1018216450342",
+    "project_id": "tbc-assign23",
+    "storage_bucket": "tbc-assign23.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1018216450342:android:f75112fdbbf879f1de19e7",
+        "android_client_info": {
+          "package_name": "com.example.tbc_assign22"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCXbO8qk_T2kYmQTscrnjmFwjL7GsKmPPM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

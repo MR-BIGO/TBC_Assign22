@@ -1,13 +1,17 @@
 package com.example.tbc_assign22.presentation.screen.home
 
-import android.util.Log.d
 import android.view.View
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.tbc_assign22.R
 import com.example.tbc_assign22.databinding.FragmentHomeBinding
 import com.example.tbc_assign22.presentation.event.HomeFragmentEvents
 import com.example.tbc_assign22.presentation.screen.base.BaseFragment
@@ -30,7 +34,38 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
         viewModel.onEvent(HomeFragmentEvents.GetPlaces)
         viewModel.onEvent(HomeFragmentEvents.GetPosts)
+
+        listeners()
+
+        initialItem()
     }
+
+    private fun initialItem() {
+        binding.navView.menu.getItem(1).isChecked = true
+    }
+
+    private fun listeners() {
+        postsRecyclerAdapter.itemOnClick = {
+            viewModel.onEvent(HomeFragmentEvents.PostPressed(it))
+        }
+
+//        binding.navView.setOnItemSelectedListener { item ->
+//            when(item.itemId){
+//                R.id.menuFavourites -> {}
+//                R.id.menuBell -> {}
+//                R.id.menuMessage -> {}
+//                R.id.menuHome -> {}
+//            }
+//
+//        }
+
+    }
+
+//    private fun setCurrentFragment(fragment: Fragment) {
+//        childFragmentManager.beginTransaction().apply {
+//            replace(binding.fragmentContainer, fragment)
+//        }
+//    }
 
     private fun setUpRecyclers() = with(binding) {
         placesRecyclerAdapter = PlacesRecyclerAdapter()
@@ -61,14 +96,29 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             viewModel.onEvent(HomeFragmentEvents.ResetError)
         }
 
-         progressBar.visibility =if (state.loading) View.VISIBLE else View.GONE
+        progressBar.visibility = if (state.loading) View.VISIBLE else View.GONE
+    }
+
+    private fun handleEvent(event: HomeFragmentViewModel.HomeNavigationEvents) {
+        when(event){
+            is HomeFragmentViewModel.HomeNavigationEvents.NavigateToDetails -> {
+                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(event.id))
+            }
+        }
     }
 
     private fun bindObservers() {
         viewLifecycleOwner.lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.homeState.collect {
-                    handleState(it)
+                launch {
+                    viewModel.homeState.collect {
+                        handleState(it)
+                    }
+                }
+                launch {
+                    viewModel.uiEvent.collect {
+                        handleEvent(it)
+                    }
                 }
             }
         }

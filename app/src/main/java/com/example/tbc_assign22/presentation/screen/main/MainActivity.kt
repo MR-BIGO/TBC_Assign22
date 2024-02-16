@@ -1,14 +1,19 @@
 package com.example.tbc_assign22.presentation.screen.main
 
-import androidx.appcompat.app.AppCompatActivity
+import android.Manifest
+import android.os.Build
 import android.os.Bundle
-import androidx.core.view.get
-import com.example.tbc_assign22.R
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.example.tbc_assign22.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    private val requestPermission =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
+        }
 
     private lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,10 +21,13 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        initialItem()
+        requestPermission()
+
     }
 
-    private fun initialItem() {
-        binding.navView.menu.getItem(1).isChecked = true
+    private fun requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            requestPermission.launch(arrayOf(Manifest.permission.POST_NOTIFICATIONS))
+        }
     }
 }

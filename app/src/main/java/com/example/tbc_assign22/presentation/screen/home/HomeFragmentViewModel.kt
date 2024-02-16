@@ -9,6 +9,7 @@ import com.example.tbc_assign22.presentation.event.HomeFragmentEvents
 import com.example.tbc_assign22.presentation.mapper.toPres
 import com.example.tbc_assign22.presentation.state.home.HomeFragmentState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,11 +26,23 @@ class HomeFragmentViewModel @Inject constructor(
     private val _homeState = MutableStateFlow(HomeFragmentState())
     val homeState: SharedFlow<HomeFragmentState> = _homeState.asStateFlow()
 
+    private val _uiEvent = MutableSharedFlow<HomeNavigationEvents>()
+    val uiEvent: SharedFlow<HomeNavigationEvents> get() = _uiEvent
+
     fun onEvent(event: HomeFragmentEvents) {
         when (event) {
             is HomeFragmentEvents.ResetError -> setError(null)
-            is HomeFragmentEvents.GetPosts -> {setUpPosts()}
-            is HomeFragmentEvents.GetPlaces -> {setUpPlaces()}
+            is HomeFragmentEvents.GetPosts -> {
+                setUpPosts()
+            }
+
+            is HomeFragmentEvents.GetPlaces -> {
+                setUpPlaces()
+            }
+
+            is HomeFragmentEvents.PostPressed -> {
+                navigateToDetails(event.id)
+            }
         }
     }
 
@@ -77,5 +90,15 @@ class HomeFragmentViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun navigateToDetails(id: Int) {
+        viewModelScope.launch {
+            _uiEvent.emit(HomeNavigationEvents.NavigateToDetails(id))
+        }
+    }
+
+    sealed class HomeNavigationEvents {
+        data class NavigateToDetails(val id: Int) : HomeNavigationEvents()
     }
 }

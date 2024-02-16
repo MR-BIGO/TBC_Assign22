@@ -4,4 +4,5 @@ sealed class HomeFragmentEvents {
     data object ResetError : HomeFragmentEvents()
     data object GetPosts : HomeFragmentEvents()
     data object GetPlaces : HomeFragmentEvents()
+    data class PostPressed(val id: Int) : HomeFragmentEvents()
 }

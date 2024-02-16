@@ -7,4 +7,5 @@ import kotlinx.coroutines.flow.Flow
 interface IGetPostsRepository {
 
     suspend fun getPosts(): Flow<Resource<List<Post>>>
+    suspend fun getPostWithId(id: Int): Flow<Resource<Post>>
 }
