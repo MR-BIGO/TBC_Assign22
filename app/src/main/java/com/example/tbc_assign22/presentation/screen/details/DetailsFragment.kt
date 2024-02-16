@@ -81,7 +81,10 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
         tvDate.epochToDate(post.owner.postDate.toLong())
         Glide.with(requireContext()).load(post.owner.profile)
             .placeholder(R.drawable.ic_launcher_background).into(ivProfile)
-        imagesRecyclerAdapter.setData(post.images)
+        imagesRecyclerAdapter.apply {
+            setData(post.images)
+            notifyItemRangeInserted(0, post.images.size)
+        }
     }
 
     private fun bindObservers() {
