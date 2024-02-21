@@ -7,11 +7,5 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FavouritesFragment : BaseFragment<FragmentFavouritesBinding>(FragmentFavouritesBinding::inflate) {
     override fun setUp() {
-        initialItem()
     }
-
-    private fun initialItem() {
-        binding.navView.menu.getItem(0).isChecked = true
-    }
-
 }

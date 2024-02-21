@@ -1,11 +1,15 @@
-package com.example.tbc_assign22.presentation.screen.main
+package com.example.tbc_assign22.presentation.screen.activity
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.Navigation
+import com.example.tbc_assign22.R
 import com.example.tbc_assign22.databinding.ActivityMainBinding
+import com.example.tbc_assign22.presentation.screen.main.MainFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,6 +27,27 @@ class MainActivity : AppCompatActivity() {
 
         requestPermission()
 
+        if (savedInstanceState == null) {
+            handleIntent(intent)
+        }
+
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent?) {
+        intent?.extras?.let { extras ->
+            val id = extras.getInt("id", 0)
+            if (id != 0) {
+                val navController = Navigation.findNavController(this, R.id.fragment_container)
+                val action = MainFragmentDirections.actionMainFragmentToDetailsFragment(id)
+                navController.navigate(action)
+            }
+        }
     }
 
     private fun requestPermission() {

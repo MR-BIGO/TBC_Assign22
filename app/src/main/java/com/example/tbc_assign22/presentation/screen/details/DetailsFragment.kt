@@ -42,7 +42,7 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>(FragmentDetailsBind
 
     private fun listeners() {
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToHomeFragment())
+            findNavController().popBackStack()
         }
     }
 

@@ -1,11 +1,13 @@
 package com.example.tbc_assign22.presentation.notification
 
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.core.app.NotificationCompat
-import androidx.navigation.NavDeepLinkBuilder
 import com.example.tbc_assign22.R
+import com.example.tbc_assign22.presentation.screen.activity.MainActivity
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 
@@ -25,11 +27,57 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             it.putInt("id", id)
         }
 
-        val pendingIntent = NavDeepLinkBuilder(this)
-            .setGraph(R.navigation.nav_graph)
-            .setDestination(R.id.detailsFragment)
-            .setArguments(args)
-            .createPendingIntent()
+//        val pendingIntent = NavDeepLinkBuilder(this)
+//            .setGraph(R.navigation.nav_graph)
+//            .setDestination(R.id.detailsFragment)
+//            .setArguments(args)
+//            .createPendingIntent()
+
+//        val detailsIntent = NavDeepLinkBuilder(this)
+//            .setGraph(R.navigation.nav_graph)
+//            .setDestination(R.id.detailsFragment)
+//            .setArguments(args)
+//            .createPendingIntent()
+//
+//        val stackBuilder = TaskStackBuilder.create(this).apply {
+//            addNextIntentWithParentStack(Intent(this@MyFirebaseMessagingService, MainActivity::class.java))
+//            addNextIntent(detailsIntent)
+//        }
+//        stackBuilder.addNextIntentWithParentStack(detailsIntent)
+
+//        val detailsIntent = Intent(this@MyFirebaseMessagingService, MainActivity::class.java).apply {
+//            action = Intent.ACTION_VIEW
+//            putExtra("destination", "detailsFragment")
+//            putExtras(args)
+//        }
+
+//        val pendingIntent = NavDeepLinkBuilder(this)
+//            .setGraph(R.navigation.nav_graph)
+//            .setDestination(R.id.detailsFragment)
+//            .setArguments(args)
+//            .createPendingIntent()
+
+        val intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("id", id)
+        }
+
+        val pendingIntent = PendingIntent.getActivity(
+            this, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+//        val stackBuilder = TaskStackBuilder.create(this).apply {
+//            addNextIntentWithParentStack(detailsIntent)
+//        }
+
+
+//
+//        val pendingIntent = stackBuilder.getPendingIntent(
+//            0,
+//            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+//        )
+
 
         val notification = NotificationCompat.Builder(this, "channel_id")
             .setSmallIcon(R.mipmap.ic_launcher_round)

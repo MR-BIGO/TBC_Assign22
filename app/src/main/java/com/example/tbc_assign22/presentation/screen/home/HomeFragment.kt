@@ -17,6 +17,7 @@ import com.example.tbc_assign22.presentation.event.HomeFragmentEvents
 import com.example.tbc_assign22.presentation.screen.base.BaseFragment
 import com.example.tbc_assign22.presentation.screen.home.adapters.PlacesRecyclerAdapter
 import com.example.tbc_assign22.presentation.screen.home.adapters.PostsRecyclerAdapter
+import com.example.tbc_assign22.presentation.screen.main.MainFragmentDirections
 import com.example.tbc_assign22.presentation.state.home.HomeFragmentState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -36,36 +37,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
         viewModel.onEvent(HomeFragmentEvents.GetPosts)
 
         listeners()
-
-        initialItem()
     }
 
-    private fun initialItem() {
-        binding.navView.menu.getItem(1).isChecked = true
-    }
 
     private fun listeners() {
         postsRecyclerAdapter.itemOnClick = {
             viewModel.onEvent(HomeFragmentEvents.PostPressed(it))
         }
-
-//        binding.navView.setOnItemSelectedListener { item ->
-//            when(item.itemId){
-//                R.id.menuFavourites -> {}
-//                R.id.menuBell -> {}
-//                R.id.menuMessage -> {}
-//                R.id.menuHome -> {}
-//            }
-//
-//        }
-
     }
-
-//    private fun setCurrentFragment(fragment: Fragment) {
-//        childFragmentManager.beginTransaction().apply {
-//            replace(binding.fragmentContainer, fragment)
-//        }
-//    }
 
     private fun setUpRecyclers() = with(binding) {
         placesRecyclerAdapter = PlacesRecyclerAdapter()
@@ -102,7 +81,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun handleEvent(event: HomeFragmentViewModel.HomeNavigationEvents) {
         when(event){
             is HomeFragmentViewModel.HomeNavigationEvents.NavigateToDetails -> {
-                findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(event.id))
+                parentFragment?.parentFragment?.findNavController()?.navigate(MainFragmentDirections.actionMainFragmentToDetailsFragment(event.id))
             }
         }
     }

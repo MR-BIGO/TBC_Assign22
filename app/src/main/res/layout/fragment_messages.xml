@@ -15,21 +15,4 @@
         android:text="Messages Fragment"
         android:textColor="@color/white"
         android:textSize="30sp" />
-
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/navView"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="@drawable/background_nav_view"
-        app:elevation="10dp"
-        app:itemActiveIndicatorStyle="@color/grey_medium"
-        app:itemIconSize="28dp"
-        app:itemIconTint="@color/nav_view_selector"
-        app:labelVisibilityMode="unlabeled"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/my_menu" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
